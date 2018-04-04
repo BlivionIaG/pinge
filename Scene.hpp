@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Ball.hpp"
+#include "Game.hpp"
 #include <QGraphicsEllipseItem>
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
@@ -12,15 +12,16 @@ class Scene : public QGraphicsScene {
   Q_OBJECT
 public:
   Scene(int width, int height, QObject *parent = 0);
-  ~Scene() {}
+  ~Scene() noexcept {}
 
+  void initBall(Ball &b);
 public slots:
-  void update();
+  void updateBall();
 
 private:
+  int width, height;
   QGraphicsRectItem *screen;
   QGraphicsEllipseItem *ball;
+  Game game;
   QTimer *timer;
-  Ball boule;
-  int width, height;
 };

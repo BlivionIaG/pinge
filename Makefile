@@ -50,11 +50,13 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp \
+SOURCES       = Game.cpp \
+		main.cpp \
 		Scene.cpp \
 		Window.cpp moc_Scene.cpp \
 		moc_Window.cpp
-OBJECTS       = main.o \
+OBJECTS       = Game.o \
+		main.o \
 		Scene.o \
 		Window.o \
 		moc_Scene.o \
@@ -116,6 +118,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -135,9 +138,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		pinge.pro Ball.hpp \
+		Game.hpp \
 		Player.hpp \
 		Scene.hpp \
-		Window.hpp main.cpp \
+		Window.hpp Game.cpp \
+		main.cpp \
 		Scene.cpp \
 		Window.cpp
 QMAKE_TARGET  = pinge
@@ -208,6 +213,7 @@ Makefile: pinge.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.con
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
@@ -288,6 +294,7 @@ Makefile: pinge.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.con
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exclusive_builds.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/toolchain.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
@@ -325,8 +332,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Ball.hpp Player.hpp Scene.hpp Window.hpp $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp Scene.cpp Window.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Ball.hpp Game.hpp Player.hpp Scene.hpp Window.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents Game.cpp main.cpp Scene.cpp Window.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -361,12 +368,18 @@ moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 compiler_moc_header_make_all: moc_Scene.cpp moc_Window.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_Scene.cpp moc_Window.cpp
-moc_Scene.cpp: Scene.hpp \
+moc_Scene.cpp: Game.hpp \
+		Ball.hpp \
+		Player.hpp \
+		Scene.hpp \
 		moc_predefs.h \
 		/usr/lib/x86_64-linux-gnu/qt5/bin/moc
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/kev29/Projects/pinge -I/home/kev29/Projects/pinge -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include Scene.hpp -o moc_Scene.cpp
 
 moc_Window.cpp: Scene.hpp \
+		Game.hpp \
+		Ball.hpp \
+		Player.hpp \
 		Window.hpp \
 		moc_predefs.h \
 		/usr/lib/x86_64-linux-gnu/qt5/bin/moc
@@ -386,15 +399,29 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
+Game.o: Game.cpp Game.hpp \
+		Ball.hpp \
+		Player.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Game.o Game.cpp
+
 main.o: main.cpp Window.hpp \
-		Scene.hpp
+		Scene.hpp \
+		Game.hpp \
+		Ball.hpp \
+		Player.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-Scene.o: Scene.cpp Scene.hpp
+Scene.o: Scene.cpp Scene.hpp \
+		Game.hpp \
+		Ball.hpp \
+		Player.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Scene.o Scene.cpp
 
 Window.o: Window.cpp Window.hpp \
-		Scene.hpp
+		Scene.hpp \
+		Game.hpp \
+		Ball.hpp \
+		Player.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Window.o Window.cpp
 
 moc_Scene.o: moc_Scene.cpp 
