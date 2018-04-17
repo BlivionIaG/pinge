@@ -27,6 +27,16 @@ void Scene::initGameGraphics() {
   two->setPos(game.getPlayerTwo().getX(), game.getPlayerTwo().getY());
   this->addItem(two);
 
+  scoreOne =
+      new QGraphicsTextItem(QString::number(game.getPlayerOne().getScore()));
+  scoreOne->setPos(3 * width / 8, height / 16);
+  this->addItem(scoreOne);
+
+  scoreTwo =
+      new QGraphicsTextItem(QString::number(game.getPlayerTwo().getScore()));
+  scoreTwo->setPos(5 * width / 8, height / 16);
+  this->addItem(scoreTwo);
+
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(update()));
   timer->start(30);
@@ -36,6 +46,8 @@ void Scene::update() {
   ball->setPos(game.getBall().getX(), game.getBall().getY());
   one->setPos(game.getPlayerOne().getX(), game.getPlayerOne().getY());
   two->setPos(game.getPlayerTwo().getX(), game.getPlayerTwo().getY());
+  scoreOne->setPlainText(QString::number(game.getPlayerOne().getScore()));
+  scoreTwo->setPlainText(QString::number(game.getPlayerTwo().getScore()));
 
   game.moveBall();
 }

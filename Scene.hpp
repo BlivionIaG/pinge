@@ -6,6 +6,8 @@
 #include <QGraphicsEllipseItem>
 #include <QGraphicsRectItem>
 #include <QGraphicsScene>
+#include <QGraphicsTextItem>
+#include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QTimer>
 #include <QWidget>
@@ -25,7 +27,7 @@ private:
   int width, height;
 
   QGraphicsRectItem *screen, *one, *two;
-  // QTextItem *scoreOne, *score2;
+  QGraphicsTextItem *scoreOne, *scoreTwo;
   QGraphicsEllipseItem *ball;
 
   Game game;
