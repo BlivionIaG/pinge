@@ -26,6 +26,9 @@ public:
   Player &getPlayerTwo() { return two; }
 
   void moveBall();
+  void movePlayerOne();
+  void movePlayerTwo();
+
   void keepIn(int x0, int y0, int x1, int y1);
   template <typename T> void collide(T x0, T y0, T x1, T y1);
 

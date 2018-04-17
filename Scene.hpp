@@ -20,6 +20,7 @@ public:
 
   void initGameGraphics();
   void keyPressEvent(QKeyEvent *ev);
+  void keyReleaseEvent(QKeyEvent *ev);
 public slots:
   void update();
 
@@ -32,6 +33,8 @@ private:
 
   Game game;
   QTimer *timer;
+
+  bool keys[];
 };
 
 #endif /* PINGE_SCENE_HPP */

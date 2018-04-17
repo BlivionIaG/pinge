@@ -3,6 +3,10 @@
 Scene::Scene(int width, int height, QObject *parent)
     : QGraphicsScene(parent), width{width}, height{height}, game{width,
                                                                  height} {
+  keys[256] = {false};
+  keys[38] = false;
+  keys[39] = false;
+
   screen = new QGraphicsRectItem(0, 0, width, height);
   screen->setPos(0, 0);
 
@@ -50,6 +54,10 @@ void Scene::update() {
   scoreTwo->setPlainText(QString::number(game.getPlayerTwo().getScore()));
 
   game.moveBall();
+  if (keys['Z'] || keys['S'])
+    game.movePlayerOne();
+  if (keys[38] || keys[39])
+    game.movePlayerTwo();
 }
 
 void Scene::keyPressEvent(QKeyEvent *ev) {
@@ -57,16 +65,37 @@ void Scene::keyPressEvent(QKeyEvent *ev) {
   auto &p1 = game.getPlayerOne(), &p2 = game.getPlayerTwo();
   switch (ev->key()) {
   case Qt::Key_Up:
-    p2.setY(p2.getY() - p2.getSpeed());
+    p2.setDY(-1);
+    keys[38] = true;
     break;
   case Qt::Key_Down:
-    p2.setY(p2.getY() + p2.getSpeed());
+    p2.setDY(1);
+    keys[39] = true;
     break;
   case Qt::Key_Z:
-    p1.setY(p1.getY() - p1.getSpeed());
+    p1.setDY(-1);
+    keys['Z'] = true;
     break;
   case Qt::Key_S:
-    p1.setY(p1.getY() + p1.getSpeed());
+    p1.setDY(1);
+    keys['S'] = true;
+    break;
+  }
+}
+
+void Scene::keyReleaseEvent(QKeyEvent *ev) {
+  switch (ev->key()) {
+  case Qt::Key_Up:
+    keys[38] = false;
+    break;
+  case Qt::Key_Down:
+    keys[39] = false;
+    break;
+  case Qt::Key_Z:
+    keys['Z'] = false;
+    break;
+  case Qt::Key_S:
+    keys['S'] = false;
     break;
   }
 }

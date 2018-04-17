@@ -11,6 +11,14 @@ void Game::moveBall() {
   ball.setY(ball.getY() + ball.getDY() * ball.getSpeed());
 }
 
+void Game::movePlayerOne() {
+  one.setY(one.getY() + one.getDY() * one.getSpeed());
+}
+
+void Game::movePlayerTwo() {
+  two.setY(two.getY() + two.getDY() * two.getSpeed());
+}
+
 void Game::keepIn(int x0, int y0, int x1, int y1) {
   if (ball.getX() >= x1 - ball.getSize() || ball.getX() <= x0) {
     ball.toggleDX();
