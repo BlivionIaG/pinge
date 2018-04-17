@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PINGE_BALL_HPP
+#define PINGE_BALL_HPP
 
 class Ball {
 public:
@@ -25,3 +26,5 @@ public:
 private:
   int x, y, size, speed, dx, dy;
 };
+
+#endif /* PINGE_BALL_HPP */
