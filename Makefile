@@ -241,9 +241,8 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/features/exceptions.prf \
 		/usr/lib/qt/mkspecs/features/yacc.prf \
 		/usr/lib/qt/mkspecs/features/lex.prf \
-		pinge.pro Ball.hpp \
+		pinge.pro Entity.hpp \
 		Game.hpp \
-		Player.hpp \
 		Scene.hpp \
 		Window.hpp Game.cpp \
 		main.cpp \
@@ -644,7 +643,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Ball.hpp Game.hpp Player.hpp Scene.hpp Window.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents Entity.hpp Game.hpp Scene.hpp Window.hpp $(DISTDIR)/
 	$(COPY_FILE) --parents Game.cpp main.cpp Scene.cpp Window.cpp $(DISTDIR)/
 
 
@@ -681,8 +680,7 @@ compiler_moc_header_make_all: moc_Scene.cpp moc_Window.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_Scene.cpp moc_Window.cpp
 moc_Scene.cpp: Game.hpp \
-		Ball.hpp \
-		Player.hpp \
+		Entity.hpp \
 		Scene.hpp \
 		moc_predefs.h \
 		/usr/bin/moc
@@ -690,8 +688,7 @@ moc_Scene.cpp: Game.hpp \
 
 moc_Window.cpp: Scene.hpp \
 		Game.hpp \
-		Ball.hpp \
-		Player.hpp \
+		Entity.hpp \
 		Window.hpp \
 		moc_predefs.h \
 		/usr/bin/moc
@@ -714,28 +711,24 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 ####### Compile
 
 Game.o: Game.cpp Game.hpp \
-		Ball.hpp \
-		Player.hpp
+		Entity.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Game.o Game.cpp
 
 main.o: main.cpp Window.hpp \
 		Scene.hpp \
 		Game.hpp \
-		Ball.hpp \
-		Player.hpp
+		Entity.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 Scene.o: Scene.cpp Scene.hpp \
 		Game.hpp \
-		Ball.hpp \
-		Player.hpp
+		Entity.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Scene.o Scene.cpp
 
 Window.o: Window.cpp Window.hpp \
 		Scene.hpp \
 		Game.hpp \
-		Ball.hpp \
-		Player.hpp
+		Entity.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Window.o Window.cpp
 
 moc_Scene.o: moc_Scene.cpp 

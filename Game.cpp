@@ -27,6 +27,11 @@ void Game::keepIn(int x0, int y0, int x1, int y1) {
     } else if (ball.getX() >= x1 - ball.getSize()) {
       one.setScore(one.getScore() + 1);
     }
+
+    ball.setY(height / 2);
+    ball.setX(width / 2);
+
+    togglePause();
   }
   if (ball.getY() >= y1 - ball.getSize() || ball.getY() <= y0)
     ball.toggleDY();

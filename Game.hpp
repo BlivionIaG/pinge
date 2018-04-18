@@ -1,18 +1,18 @@
 #ifndef PINGE_GAME_HPP
 #define PINGE_GAME_HPP
 
-#include "Ball.hpp"
-#include "Player.hpp"
+#include "Entity.hpp"
 #include <cmath>
 #include <iostream>
 
 class Game {
 public:
   Game(int width, int height)
-      : width{width}, height{height}, ball{(int)width / 4, (int)height / 4,
-                                           (int)height / 12, 5},
-        one{10, (int)height / 2, 20, 100, 10}, two{width - 30, (int)height / 2,
-                                                   20, 100, 10} {}
+      : width{width}, height{height}, ball{(int)width / 2, (int)height / 2,
+                                           (int)height / 16, (int)height / 16,
+                                           5},
+        one{10, (int)height / 2, 20, 100, 10},
+        two{width - 30, (int)height / 2, 20, 100, 10}, paused{true} {}
   ~Game() {}
 
   void setWidth(const int val) { width = val; }
@@ -21,9 +21,12 @@ public:
   int getWidth() const { return width; }
   int getHeight() const { return height; }
 
-  Ball &getBall() { return ball; }
-  Player &getPlayerOne() { return one; }
-  Player &getPlayerTwo() { return two; }
+  Entity &getBall() { return ball; }
+  Entity &getPlayerOne() { return one; }
+  Entity &getPlayerTwo() { return two; }
+
+  bool isPaused() const { return paused; }
+  void togglePause() { paused = !paused; }
 
   void moveBall();
   void movePlayerOne();
@@ -37,8 +40,8 @@ public:
 
 private:
   int width, height;
-  Ball ball;
-  Player one, two;
+  Entity ball, one, two;
+  bool paused;
 };
 
 #endif /* PINGE_GAME_HPP */

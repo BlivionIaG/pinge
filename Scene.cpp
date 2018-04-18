@@ -6,6 +6,9 @@ Scene::Scene(int width, int height, QObject *parent)
   keys[256] = {false};
   keys[38] = false;
   keys[39] = false;
+  keys[32] = false;
+  keys['Z'] = false;
+  keys['S'] = false;
 
   screen = new QGraphicsRectItem(0, 0, width, height);
   screen->setPos(0, 0);
@@ -43,7 +46,7 @@ void Scene::initGameGraphics() {
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-  timer->start(30);
+  timer->start(20);
 }
 
 void Scene::update() {
@@ -53,11 +56,13 @@ void Scene::update() {
   scoreOne->setPlainText(QString::number(game.getPlayerOne().getScore()));
   scoreTwo->setPlainText(QString::number(game.getPlayerTwo().getScore()));
 
-  game.moveBall();
-  if (keys['Z'] || keys['S'])
-    game.movePlayerOne();
-  if (keys[38] || keys[39])
-    game.movePlayerTwo();
+  if (!game.isPaused()) {
+    game.moveBall();
+    if (keys['Z'] || keys['S'])
+      game.movePlayerOne();
+    if (keys[38] || keys[39])
+      game.movePlayerTwo();
+  }
 }
 
 void Scene::keyPressEvent(QKeyEvent *ev) {
@@ -79,6 +84,9 @@ void Scene::keyPressEvent(QKeyEvent *ev) {
   case Qt::Key_S:
     p1.setDY(1);
     keys['S'] = true;
+    break;
+  case Qt::Key_Space:
+    game.togglePause();
     break;
   }
 }
